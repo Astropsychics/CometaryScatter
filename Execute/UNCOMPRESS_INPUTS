@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd .. 
+
+tar -zxf Inputs.tar.gz 
+
+cd Execute

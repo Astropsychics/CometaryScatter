@@ -1,0 +1,5 @@
+'Effective_Area_X.dat' file format
+
+X: Telescope
+
+Energy (eV)  |  Effective Area (cm^2) 

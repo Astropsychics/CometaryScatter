@@ -1,0 +1,6 @@
+'X_Mie_Y.dat' file format
+
+X: element
+Y: size (nm)
+
+Energy (eV)  |  Angle (degrees)  | Diff. Cross-Section (cm^2)

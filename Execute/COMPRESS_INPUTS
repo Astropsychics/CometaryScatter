@@ -1,0 +1,3 @@
+#!/bin/bash
+
+tar -zcvf ../Inputs.tar.gz ../Inputs/

@@ -1,0 +1,6 @@
+'X_output_Y.dat' file format
+
+X: element
+Y: comet name
+
+Energy (keV)  |  Total Cross-Section (m^2)  |  Intensity Ratio  |  Brightness Ratio (m^2)
