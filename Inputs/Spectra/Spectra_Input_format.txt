@@ -1,3 +1,0 @@
-'Total_Intensity_X.dat' file format
-
-Energy (eV)  |  Peak Height 

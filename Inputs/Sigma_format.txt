@@ -1,5 +1,0 @@
-'X_sigma.txt' file format
-
-X: element
-
-Energy (keV)  |  Cross-Section (cm^2/g)
