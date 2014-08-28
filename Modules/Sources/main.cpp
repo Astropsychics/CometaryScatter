@@ -29,10 +29,10 @@ int main(int argc, char *argv[]){
         
 		//Prompt user to select which comet to analyze
 		cout << "Please select the number of which comet you'd like to analyze." << endl;
-		cout<< "1.8P  2.Encke  3.IZ  4.LS4  5.MH  6.all comets" << endl;
+		cout<< "1.8P  2.Encke  3.IZ  4.LS4  5.MH  6.ISON  7.PanSTARRS  8.all comets" << endl;
 		cin >> comet_number;
         
-		if ( 1 > comet_number || comet_number > 6 ){
+		if ( 1 > comet_number || comet_number > 8 ){
 			cout << "I'm sorry, Dave. I can't do that." << endl;
 			return 0; }
 	}
@@ -40,12 +40,12 @@ int main(int argc, char *argv[]){
 	MPI_Bcast(&comet_number, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Barrier(MPI_COMM_WORLD);
     
-	if (comet_number == 6 ){
+	if (comet_number == 8 ){
         comet_all = true;
 		comet_number = 1; }
     
     
-	while ( comet_number < 6 ){
+	while ( comet_number < 8 ){
 
         	MPI_Barrier(MPI_COMM_WORLD);
 		if (rank == 0){
