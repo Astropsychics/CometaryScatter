@@ -174,9 +174,12 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 	    				double diff_cross_i = gsl_spline_eval (spline_ptr, l, accel_ptr);
 
 	    				Brightness = Brightness + ( 2*M_PI*pow(rd,2.0)*Intensity )/( diff_cross_Earth ) 
-					* cos((l+0.5)*M_PI/180) * ( sin((l+1)*M_PI/180) - sin(l*M_PI/180) ) * diff_cross_i ;  	
+                            * cos((l+0.5)*M_PI/180) * ( sin((l+1)*M_PI/180) - sin(l*M_PI/180) ) * diff_cross_i ;
     				}
-						
+                    
+                    Brightness = Brightness*(1e4);
+                    //Converts Brightness to cm^2 to properly cancel with intensity
+                    
     				gsl_spline_free (spline_ptr);
     				gsl_interp_accel_free (accel_ptr);
 

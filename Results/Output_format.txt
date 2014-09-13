@@ -3,4 +3,25 @@
 X: element
 Y: comet name
 
-Energy (keV)  |  Total Cross-Section (m^2)  |  Intensity Ratio  |  Brightness Ratio (m^2)
+(!For gas!) 
+Energy (keV)  | Diff. Cross Section (m^2) | Spectral Intensity (photons/cm^2/sec/keV)  |  Spectral Brightness (photons/sec/keV)
+
+(!For dust!) 
+Energy (keV) | Spectral Intensity (photons/cm^2/sec/keV)  |  Spectral Brightness (photons/sec/keV)
+
+—————————————————————————————————————— 
+
+‘Spectra_total_Y.dat' file format
+
+Y: comet name
+
+Energy (keV)  | photons/cm^2/sec/keV
+
+—————————————————————————————————————
+
+‘Chandra_X_Y.dat' file format
+
+X: element type
+Y: comet name
+
+Energy (keV)  | Counts/sec/keV

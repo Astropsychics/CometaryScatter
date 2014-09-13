@@ -33,7 +33,7 @@ int gas_mixing_ratio(double energy_start, double energy_end, double energy_step,
 		for( int k=0; k<row; k++){
 			total_intensity[k][0] = input[k][0];
 			total_intensity[k][1] = total_intensity[k][1] + mixing_ratio[x] * input[k][2]; 
-			total_intensity[k][2] = total_intensity[k][2] + mixing_ratio[x] * input[k][2]; }
+			total_intensity[k][2] = total_intensity[k][2] + mixing_ratio[x] * input[k][3]; }
 	}
 
 	string final_name = "../Results/" + comet_name + "/gas_total_output_" + comet_name + ".dat";
