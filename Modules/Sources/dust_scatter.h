@@ -25,11 +25,13 @@ double delta_a = 0.1e-9;	       //Grain radius step size
 
 int dust_core(double energy_start, double energy_end, double energy_step, int comet_number){
 
+    //input string of different dust types
 	string element[3] = {"C","H2O","Si"};
 		
 	int rank;  	
 	MPI_Comm_rank( MPI_COMM_WORLD , &rank );
 
+    //inputs data from comet_input.h
 	double Ro = input_Ro;
 	double Q = input_Q[comet_number - 1]; 
 	double vel = input_vel[comet_number - 1];
@@ -67,6 +69,7 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 	//It is presently set to calculate all values by default
 	for (int x = 0; x < 3; x++ ){
 
+        //determines optimal delegation of jobs to number of cores
 		int i_hi = 0;
  		int i_lo = 0;
   		int proc_number;
@@ -108,12 +111,16 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
     		while (i_lo <= i_hi ){
     
-    			double energy = energy_start;
+            
+                
+            double energy = energy_start;
     				
 			double grain_size;
 			grain_size = ( i_lo )/10.0 + 1.0;
    			string grain_string = static_cast<ostringstream*>( &(ostringstream() << grain_size) )->str();
-				
+			
+                
+            //inputs cross section files
 			string input = "../Inputs/" + element[x] + "_Mie_Data/" + element[x] + 
 			"_Mie_" + grain_string + "nm.dat";
 
@@ -137,34 +144,34 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
     			//This loop calculates the intensity emitted for each grain size over the desired energy range
     			while ( energy <= energy_end ){
 
-				double cross_angle[181] = {0};
+                    double cross_angle[181] = {0};
     				double cross_sec[181] = {0};
-
+                    
     				for ( int k=1; k < 182; k++){
 	    				cross_angle[k-1] = cross_input[0][k];
 
 	    				cross_sec[k-1] = cross_input[z][k] / 1e4;	//converts to m^2
-    				}			
+                    }
 
-				//Establishes a interpolation function for the cross-sections
-    				gsl_interp_accel *accel_ptr;
-    				gsl_spline *spline_ptr;
-    				accel_ptr = gsl_interp_accel_alloc ();
-    				spline_ptr = gsl_spline_alloc (gsl_interp_cspline, 181);
+                    //Establishes a interpolation function for the cross-sections
+                    gsl_interp_accel *accel_ptr;
+                    gsl_spline *spline_ptr;
+                    accel_ptr = gsl_interp_accel_alloc ();
+                    spline_ptr = gsl_spline_alloc (gsl_interp_cspline, 181);
     				gsl_spline_init (spline_ptr, cross_angle, cross_sec, 181);
 
-				//Scattered differential cross section
-        			double scat_cross = gsl_spline_eval (spline_ptr, (180.0/M_PI)*(M_PI-theta), accel_ptr);
+                    //Scattered differential cross section
+                    double scat_cross = gsl_spline_eval (spline_ptr, (180.0/M_PI)*(M_PI-theta), accel_ptr);
 
-        			//Dust particle radius distribution
-				double n = abs(alpha - 1) * Np/(a_low) * pow( (a_low/(grain_size*1e-9)), alpha );
+                    //Dust particle radius distribution
+                    double n = abs(alpha - 1) * Np/(a_low) * pow( (a_low/(grain_size*1e-9)), alpha );
 
         			//Calculates intensity ratio
        				double ratio = n * scat_cross * pow(Ro,2.0)/( pow(rg,2.0)*pow(rd,2.0) ) * delta_a;
 
-				double solar_intensity_temp = gsl_spline_eval (spline_ptr_inten, energy, accel_ptr_inten);
+                    double solar_intensity_temp = gsl_spline_eval (spline_ptr_inten, energy, accel_ptr_inten);
 					
-				double Intensity = ratio * solar_intensity_temp;
+                    double Intensity = ratio * solar_intensity_temp;
 
     				//Calculates Brightness of photons scattered per second
     				double Brightness = 0;
@@ -196,14 +203,16 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
     		}	
 
 		MPI_Barrier(MPI_COMM_WORLD);
-
+        
+        //Runs output_compile.h
 		if (rank == 0){
    			output_compile(energy_start, energy_end, energy_step, comet_name, x); }
 
 	}
 
 	MPI_Barrier(MPI_COMM_WORLD);
-		
+    
+    //Pushes results to dust_mixing_ratio.h
 	if (rank == 0){
 		dust_mixing_ratio(energy_start, energy_end, energy_step, comet_name); }
 
@@ -211,6 +220,6 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
    	gsl_interp_accel_free (accel_ptr_inten); 
 
 	MPI_Barrier(MPI_COMM_WORLD);
-    	return 0;  
+    return 0;  
 }
 

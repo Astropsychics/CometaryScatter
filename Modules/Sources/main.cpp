@@ -47,25 +47,33 @@ int main(int argc, char *argv[]){
     
 	while ( comet_number < 8 ){
 
-        	MPI_Barrier(MPI_COMM_WORLD);
-		if (rank == 0){
+        MPI_Barrier(MPI_COMM_WORLD);
+		
+        //Pushes data to atomic.h and fluo.h
+        //This is performed by one core as calculations are trivial
+        if (rank == 0){
         		gas_core(energy_start, energy_end, energy_step, comet_number);
         		fluo_core(energy_start, energy_step, comet_number); }
        
+        //Pushes data to dust_scatter.h
 		dust_core(energy_start, energy_end, energy_step, comet_number);
         
-        	MPI_Barrier(MPI_COMM_WORLD);
-        	if (rank == 0){
-        		chandra_core(energy_start, energy_end, energy_step, comet_number); }  
+        //Pushes data to chandra.h
+        //Calculations performed by one core, again, due to triviality
+        MPI_Barrier(MPI_COMM_WORLD);
+        if (rank == 0){
+            chandra_core(energy_start, energy_end, energy_step, comet_number); }
 
-        	if (comet_all == true){
-            		comet_number++; }
-        	else {
+        //Add +1 to counter to begin next comet, else ends program
+        if (comet_all == true){
+            comet_number++; }
+        else {
 			MPI_Barrier(MPI_COMM_WORLD);
 			MPI::Finalize();
-            		return 0; }
+            return 0; }
 	}
-	MPI_Barrier(MPI_COMM_WORLD);
+	
+    MPI_Barrier(MPI_COMM_WORLD);
 	MPI::Finalize();
    	return 0; 
 }

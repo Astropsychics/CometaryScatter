@@ -11,6 +11,14 @@ Energy (keV) | Spectral Intensity (photons/cm^2/sec/keV)  |  Spectral Brightness
 
 —————————————————————————————————————— 
 
+‘fluorescence_total_output_Y.dat' file format
+
+Y: comet name
+
+Peak Name | Peak Energy (keV)  | Intensity (photons/cm^2/sec)  
+
+—————————————————————————————————————— 
+
 ‘Spectra_total_Y.dat' file format
 
 Y: comet name

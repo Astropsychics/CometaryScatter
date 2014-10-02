@@ -14,13 +14,14 @@
 
 using namespace std;
 
-double energy_limit = 9.000;          //upper limit for fluorescence integration; limited by CHIANTI database range
+double energy_limit = 9.000;
+//upper limit for fluorescence integration; limited by CHIANTI database range
 
-int fluorescence_calc(double energy_start, double energy_step, string comet_name, double scaling_factor, double ratio){
+int fluorescence_calc(double energy_start, double energy_step, string comet_name, double scaling_factor, double fluo_ratio){
 
     double u = input_u; 
 
-    //inputs intensity spectra and defines interpolation function///////////////////////
+    //inputs intensity spectra and defines interpolation function
     fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in);
     double intensity_input[1000][2];
     for( int i=0; i<1000; i++ ){
@@ -42,14 +43,14 @@ int fluorescence_calc(double energy_start, double energy_step, string comet_name
     gsl_spline_init (spline_ptr, spectra_energy, spectra_intensity, 1000);
 
 
- 	//Creates outputs file and defines number of row in output data based on number of peaks analyzed
+ 	//Creates output file and defines number of row in output data based on number of peaks analyzed
 	string Inten_name = "../Results/" + comet_name + "/fluorescence_total_output_" + comet_name + ".dat";
 	fstream Inten(Inten_name.c_str(), fstream::out | fstream::app);
 	Inten << number_of_peaks << endl;
 	Inten.close();
 
     
-    
+    //reads in peak data from peak_input.h
     for( int counter = 1; counter <= number_of_peaks; counter++ ){
         
         string peak_name = input_peak_name[counter - 1];
@@ -64,9 +65,8 @@ int fluorescence_calc(double energy_start, double energy_step, string comet_name
         
         else{
             //multiplies ratio with efficiency rate
-            double peak_ratio = ratio * peak_efficiency;
+            double peak_ratio = fluo_ratio * peak_efficiency;
     
-            ////////////////////////////////////////////////////////////////////////////////////////////
             //inputs the cross-sections from a .dat file
             string input_name = "../Inputs/" + peak_name + "_cross.dat";
             fstream input_file(input_name.c_str(), fstream::in);
@@ -87,8 +87,8 @@ int fluorescence_calc(double energy_start, double energy_step, string comet_name
                 energy[l] = (input[l][0]); //in keV
 		
                 sigma[l] = input[l][1]/(1e4) * element_mass * u;
-                //converts total cross-section from cm^2/g to m^2/g and multiplies by atomic mass and applies
-                //normalization constant to convert it to a differential cross section
+                //converts total cross-section from cm^2/g to m^2/g
+                //and multiplies by atomic mass
         
                 ratio[l] = peak_ratio*sigma[l];
             }
@@ -99,7 +99,7 @@ int fluorescence_calc(double energy_start, double energy_step, string comet_name
             spline_ptr_ele = gsl_spline_alloc (gsl_interp_cspline, row);
             gsl_spline_init (spline_ptr_ele, energy, ratio, row);
     
-            //defines mixing ratios and multiples intensity with said ratio and energy step size
+            //calculates total intensity from fluorescence for a single peak
             double total_integral = 0;
             double energy_temp = peak_energy;
             while (energy_temp <= energy_limit){

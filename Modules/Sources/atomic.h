@@ -12,8 +12,10 @@ using namespace std;
 
 int gas_core(double energy_start, double energy_end, double energy_step, int comet_number){
 
+    //Reads input from constant_input.h
 	double Ro = input_Ro; 
 
+    //Reads inputs from comet_input.h
 	double Q = input_Q[comet_number - 1]; 
 	double vel = input_vel[comet_number - 1];
 	double r = input_r[comet_number - 1];
@@ -41,8 +43,10 @@ int gas_core(double energy_start, double energy_end, double energy_step, int com
     //Converts Brightness to cm^2 to properly cancel with intensity in next module
 
 
+    //Pushes data to atomic_cross_section_input.h
     atomic_cross(energy_start, energy_end, energy_step, comet_name, scaling_factor, ratio, Brightness);
 
+    //Pushes data to gas_mixing_ratio.h
 	gas_mixing_ratio(energy_start, energy_end, energy_step, comet_name);
 		
    	return 0; 

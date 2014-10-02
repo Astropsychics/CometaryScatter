@@ -3,8 +3,10 @@
 
 using namespace std;
 
-double input_Ro = 1.496e11;               //Earth-Sun distance in m
+//Earth-Sun distance in m
+double input_Ro = 1.496e11;
 
-double input_u = 1.6605e-24;              //atomic mass unit conversion to grams
+//atomic mass unit conversion to grams
+double input_u = 1.6605e-24;
 
 #endif

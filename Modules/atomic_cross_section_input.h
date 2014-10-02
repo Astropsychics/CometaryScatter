@@ -16,48 +16,48 @@ using namespace std;
 
 int atomic_cross(double energy_start, double energy_end, double energy_step, string comet_name, double scaling_factor, double ratio, double Brightness){
 
+    //input from constant_input.h
 	double u = input_u;
 
-	//inputs intensity spectra/////////////////////////////////////////////////////
+	//inputs intensity spectra and generates interpolation function
 	fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in); 
-    	double intensity_input[1000][2];
-    	for( int i=0; i<1000; i++ ){
-       		for( int j=0; j<2; j++ ){
-            		intensity_file >> intensity_input[i][j]; } }
-    	intensity_file.close();
+    double intensity_input[1000][2];
+    for( int i=0; i<1000; i++ ){
+        for( int j=0; j<2; j++ ){
+            intensity_file >> intensity_input[i][j]; } }
+    intensity_file.close();
 
-    	double spectra_energy[1000];
-    	double spectra_intensity[1000];
-    	for (int l=0; l<1000; l++){
+    double spectra_energy[1000];
+    double spectra_intensity[1000];
+    for (int l=0; l<1000; l++){
 
-        	spectra_energy[l] = intensity_input[l][0];
-        	spectra_intensity[l] = scaling_factor * intensity_input[l][1]; }
+    spectra_energy[l] = intensity_input[l][0];
+    spectra_intensity[l] = scaling_factor * intensity_input[l][1]; }
 
-    	gsl_interp_accel *accel_ptr_inten;
-    	gsl_spline *spline_ptr_inten;
-    	accel_ptr_inten = gsl_interp_accel_alloc ();
-    	spline_ptr_inten = gsl_spline_alloc (gsl_interp_cspline, 1000);
-    	gsl_spline_init (spline_ptr_inten, spectra_energy, spectra_intensity, 1000);
-
+    gsl_interp_accel *accel_ptr_inten;
+    gsl_spline *spline_ptr_inten;
+    accel_ptr_inten = gsl_interp_accel_alloc ();
+    spline_ptr_inten = gsl_spline_alloc (gsl_interp_cspline, 1000);
+    gsl_spline_init (spline_ptr_inten, spectra_energy, spectra_intensity, 1000);
 
 
 	//input parameters for elements
 	string element[4] = {"H","C","N","O"};
 	double mass[4] = {1.00794, 12.0107, 14.0071, 15.9994}; 
 	
+    //inputs cross sections
 	for (int x = 0; x < 4; x++){
 		string input_name = "../Inputs/" + element[x] + "_sigma.txt";
 		ifstream input_file(input_name.c_str());
     	
   		int row; 
-    		input_file >> row; 
+        input_file >> row;
 	
 		double input[row][2];
-  		//vector<vector<double> > inputC(row, std::vector<double>(2, 0));
-    		for( int i=0; i<row; i++){
+  			for( int i=0; i<row; i++){
         		for( int j=0; j<2; j++){
         	    	input_file >> input[i][j]; } }
-    		input_file.close();
+        input_file.close();
 
 		double energy[row];
 		double sigma[row];
@@ -91,7 +91,7 @@ int atomic_cross(double energy_start, double energy_end, double energy_step, str
 			output << scientific << energy_temp << " " << cross_temp
 			<< " " << Intensity << " " << Brightness*Intensity << endl;
 			energy_temp = energy_temp + energy_step;
-    		}   
+        }
    
 		output.close();
 		gsl_spline_free (spline_ptr);

@@ -16,11 +16,13 @@ int dust_mixing_ratio(double energy_start, double energy_end, double energy_step
 	string element[3] = {"C_dust","H2O","Si_dust"};
 	double mixing_ratio[3] = {0.1, 0.85, 0.05};
 	
+    //determines numbers of energy steps to perform and generates intensity array
 	int row = (energy_end - energy_start)/energy_step + 1;
 	vector< vector<double> > total_intensity(row, std::vector<double>(3, 0));
 
 	for (int x=0; x < 3; x++) {
 	
+        //inputs dust spectrum file
 		string input_name = "../Results/" + comet_name + "/" + element[x] + "_output_" + comet_name + ".dat";
 		ifstream input_file(input_name.c_str());
     	
@@ -30,7 +32,7 @@ int dust_mixing_ratio(double energy_start, double energy_end, double energy_step
         	    		input_file >> input[i][j]; } }
     		input_file.close();
 
-
+        //Applies mixing ratios
 		for( int k=0; k<row; k++){
 			total_intensity[k][0] = input[k][0];
 			total_intensity[k][1] = total_intensity[k][1] + mixing_ratio[x] * input[k][1];
@@ -38,6 +40,7 @@ int dust_mixing_ratio(double energy_start, double energy_end, double energy_step
 		}	
 	}
 
+    //Write output to file
 	string final_name = "../Results/" + comet_name + "/dust_total_output_" + comet_name + ".dat";
 	ofstream output(final_name.c_str());
  	
