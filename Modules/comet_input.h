@@ -39,4 +39,27 @@ double input_scaling_factor[7] = {(0.134 * 6.24e4)/2.36e5, (0.134 * 4.37e5)/2.36
 //exposure time, in sec
 double input_t_exp[7] = {47000, 44000, 24000, 9400, 16900, 27000, 30360};
 
+////////////////////////////////////////
+
+//number of different gases included
+int input_gas_types = 4;
+
+//input string of different gases included
+string input_gas_element[4] = {"H","C","N","O"};
+
+//atomic mixing ratio
+double input_gas_mixing_ratio[4] = {2, 0.1, 0.05, 1};
+
+///////////////////////////////////////////
+
+//number of different dusts included
+int input_dust_types = 3;
+
+//input string of different dust types included
+string input_dust_element[3] = {"C","H2O","Si"};
+string input_dust_element_revised[3] = {"C_dust","H2O","Si_dust"};
+
+//dust mixing ratio
+double input_dust_mixing_ratio[3] = {0.1, 0.85, 0.05};
+
 #endif

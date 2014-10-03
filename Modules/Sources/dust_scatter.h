@@ -25,8 +25,8 @@ double delta_a = 0.1e-9;	       //Grain radius step size
 
 int dust_core(double energy_start, double energy_end, double energy_step, int comet_number){
 
-    //input string of different dust types
-	string element[3] = {"C","H2O","Si"};
+    //inputs number of dust types from comet_input.h
+    int dust_types = input_dust_types;
 		
 	int rank;  	
 	MPI_Comm_rank( MPI_COMM_WORLD , &rank );
@@ -42,7 +42,7 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 	string comet_name = input_comet_name[comet_number - 1];
 
 	/////////////////////////////////
-    	double Np = (Q/4.76e27)*1e27;      //Number of particles, as determined from Fink & Rubin 2012, 
+    double Np = (Q/4.76e27)*1e27;      //Number of particles, as determined from Fink & Rubin 2012,
 	/////////////////////////////////
 
 	//inputs intensity spectra/////////////////////////////////////////////////////
@@ -67,8 +67,11 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
 	//This loop switches the dust composition used in the calculations.
 	//It is presently set to calculate all values by default
-	for (int x = 0; x < 3; x++ ){
+	for (int x = 0; x < dust_types; x++ ){
 
+        //input parameters for elements from comet_input.h
+        string element = input_dust_element[x];
+        
         //determines optimal delegation of jobs to number of cores
 		int i_hi = 0;
  		int i_lo = 0;
@@ -121,7 +124,7 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 			
                 
             //inputs cross section files
-			string input = "../Inputs/" + element[x] + "_Mie_Data/" + element[x] + 
+			string input = "../Inputs/" + element + "_Mie_Data/" + element +
 			"_Mie_" + grain_string + "nm.dat";
 
 			fstream input_file(input.c_str(), fstream::in);
@@ -137,8 +140,8 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
     			double theta = acos( (pow(rd,2.0) + pow(rg,2.0) - pow(Ro,2.0) ) / (2*rg*rd) );
 
 			//Defines an output file
-    			string final_name = "../Results/" + element[x] + "_Results/" + comet_name + "/" 
-			+ element[x] + "_output_" + grain_string + "nm_" + comet_name + ".dat";
+    			string final_name = "../Results/" + element + "_Results/" + comet_name + "/"
+			+ element + "_output_" + grain_string + "nm_" + comet_name + ".dat";
 
 			int z = 1; 
     			//This loop calculates the intensity emitted for each grain size over the desired energy range

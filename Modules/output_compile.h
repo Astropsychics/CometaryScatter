@@ -9,6 +9,8 @@
 #include <sstream>
 #include <vector>
 
+#include "comet_input.h"
+
 using namespace std;
 
 //Comet info
@@ -17,8 +19,8 @@ double grain_size_upper = 99.0;
 int output_compile(double energy_start, double energy_end, double energy_step, string comet_name, int x ){
 	
     //input parameters
-	string element[3] = {"C","H2O","Si"};
-	string output_element[3] = {"C_dust","H2O","Si_dust"}; 
+	string element = input_dust_element[x];
+	string output_element = input_dust_element_revised[x];
 
     //determines number of energy steps and generates intensity and brightness arrays
 	int row = (energy_end - energy_start)/energy_step + 1;
@@ -29,18 +31,12 @@ int output_compile(double energy_start, double energy_end, double energy_step, s
     
     for( int a=11; a <= grain_size_upper; a++ ){
 
-		string element_name = element[x];
-		//additional declaration of element name required due to 
-		//ostringstream conversion as it converts grain_size to a 
-		//const char*, which cannot be added to a const char [x]
-		//when defining the input file name
-
         //reads dust inputs and compiles them into a single output file
 		double grain_size = a/10.0;
 		string grain_string = static_cast<ostringstream*>( &(ostringstream() << grain_size) )->str();
 
-        string input_name = "../Results/" + element_name + "_Results/" + comet_name + "/"
-            + element_name + "_output_" + grain_string + "nm_" + comet_name + ".dat";
+        string input_name = "../Results/" + element + "_Results/" + comet_name + "/"
+            + element + "_output_" + grain_string + "nm_" + comet_name + ".dat";
         
         fstream input_file(input_name.c_str(), fstream::in);
 
@@ -60,7 +56,7 @@ int output_compile(double energy_start, double energy_end, double energy_step, s
     	} 
     
     //outputs compiled data
-	string final_name = "../Results/" + comet_name + "/" + output_element[x] + "_output_" + comet_name + ".dat";
+	string final_name = "../Results/" + comet_name + "/" + output_element + "_output_" + comet_name + ".dat";
     	fstream output(final_name.c_str(), fstream::out);
     
     for( int l=0; l<row; l++ ){

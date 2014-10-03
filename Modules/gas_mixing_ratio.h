@@ -8,21 +8,26 @@
 #include <stdlib.h>
 #include <vector>
 
+#include "comet_input.h"
+
 using namespace std;
 
 int gas_mixing_ratio(double energy_start, double energy_end, double energy_step, string comet_name){
 
-	//input parameters for elements
-	string element[4] = {"H","C","N","O"};
-	double mixing_ratio[4] = {2, 0.1, 0.05, 1};
+    //inputs number of different gases included from comet_input.h
+    int gas_types = input_gas_types;
 	
     //determines number of energy steps to perform and generates intensity array
 	int row = (energy_end - energy_start)/energy_step + 1;
 	vector< vector<double> > total_intensity(row, std::vector<double>(3, 0));
 	
-	for (int x = 0; x < 4; x++){
+	for (int x = 0; x < gas_types; x++){
+        
+        string element = input_gas_element[x];
+        double mixing_ratio = input_gas_mixing_ratio[x];
+        
 		//reads in gas spectrum files
-        string input_name = "../Results/" + comet_name + "/" + element[x] + "_output_" + comet_name + ".dat";
+        string input_name = "../Results/" + comet_name + "/" + element + "_output_" + comet_name + ".dat";
 		ifstream input_file(input_name.c_str());
     	
 		vector< vector<double> > input(row, std::vector<double>(4, 0));
@@ -34,8 +39,8 @@ int gas_mixing_ratio(double energy_start, double energy_end, double energy_step,
         //applies mixing ratios
 		for( int k=0; k<row; k++){
 			total_intensity[k][0] = input[k][0];
-			total_intensity[k][1] = total_intensity[k][1] + mixing_ratio[x] * input[k][2]; 
-			total_intensity[k][2] = total_intensity[k][2] + mixing_ratio[x] * input[k][3]; }
+			total_intensity[k][1] = total_intensity[k][1] + mixing_ratio * input[k][2];
+			total_intensity[k][2] = total_intensity[k][2] + mixing_ratio * input[k][3]; }
 	}
     
     //writes to output file

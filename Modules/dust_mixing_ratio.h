@@ -8,22 +8,28 @@
 #include <stdlib.h>
 #include <vector>
 
+#include "comet_input.h"
+
 using namespace std;
 
 int dust_mixing_ratio(double energy_start, double energy_end, double energy_step, string comet_name){
 
-	//input parameters for elements
-	string element[3] = {"C_dust","H2O","Si_dust"};
-	double mixing_ratio[3] = {0.1, 0.85, 0.05};
-	
+    //inputs number of dust types from comet_input.h
+    int dust_types = input_dust_types;
+    
     //determines numbers of energy steps to perform and generates intensity array
 	int row = (energy_end - energy_start)/energy_step + 1;
 	vector< vector<double> > total_intensity(row, std::vector<double>(3, 0));
 
-	for (int x=0; x < 3; x++) {
+    
+	for (int x=0; x < dust_types; x++) {
 	
+        //input parameters for elements from comet_input.h
+        string element = input_dust_element_revised[x];
+        double mixing_ratio = input_dust_mixing_ratio[x];
+        
         //inputs dust spectrum file
-		string input_name = "../Results/" + comet_name + "/" + element[x] + "_output_" + comet_name + ".dat";
+		string input_name = "../Results/" + comet_name + "/" + element + "_output_" + comet_name + ".dat";
 		ifstream input_file(input_name.c_str());
     	
 		vector< vector<double> > input(row, std::vector<double>(3, 0));
@@ -35,8 +41,8 @@ int dust_mixing_ratio(double energy_start, double energy_end, double energy_step
         //Applies mixing ratios
 		for( int k=0; k<row; k++){
 			total_intensity[k][0] = input[k][0];
-			total_intensity[k][1] = total_intensity[k][1] + mixing_ratio[x] * input[k][1];
-			total_intensity[k][2] = total_intensity[k][2] + mixing_ratio[x] * input[k][2]; 
+			total_intensity[k][1] = total_intensity[k][1] + mixing_ratio * input[k][1];
+			total_intensity[k][2] = total_intensity[k][2] + mixing_ratio * input[k][2];
 		}	
 	}
 
