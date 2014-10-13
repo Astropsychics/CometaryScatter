@@ -2,6 +2,6 @@
 
 cd ..
 
-tar -xzf Inputs.tar.gz
+tar -jxf Inputs.tar.bz2
 
 cd Execute
