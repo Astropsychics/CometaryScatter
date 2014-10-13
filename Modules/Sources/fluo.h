@@ -13,7 +13,7 @@ int fluo_core(double energy_start, double energy_step, int comet_number){
 
     //reads inputs from comet_input.h
 	double Ro = input_Ro;
-	double Q = input_Q[comet_number - 1]; 
+	double Q = input_Q[comet_number - 1];
 	double vel = input_vel[comet_number - 1];
 	double r = input_r[comet_number - 1];
 	double rd = input_rd[comet_number - 1];
@@ -23,10 +23,10 @@ int fluo_core(double energy_start, double energy_step, int comet_number){
 
 
     //Calculates intensity ratio integral
-    double fluo_ratio = Q * (r/vel) * 1/(4*M_PI) * pow(Ro,2.0)/( pow(rg,2.0)*pow(rd,2.0) );
+    double fluo_ratio = Q * (r/vel) * 1/(4*M_PI) * Ro*Ro/( rg*rg * rd*rd );
 
     //pushes results to fluorescence_calculations.h
     fluorescence_calc(energy_start, energy_step, comet_name, scaling_factor, fluo_ratio);
 
-	return 0; 
+	return 0;
 }

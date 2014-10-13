@@ -27,13 +27,13 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
     //inputs number of dust types from comet_input.h
     int dust_types = input_dust_types;
-		
-	int rank;  	
+
+	int rank;
 	MPI_Comm_rank( MPI_COMM_WORLD , &rank );
 
     //inputs data from comet_input.h
 	double Ro = input_Ro;
-	double Q = input_Q[comet_number - 1]; 
+	double Q = input_Q[comet_number - 1];
 	double vel = input_vel[comet_number - 1];
 	double r = input_r[comet_number - 1];
 	double rd = input_rd[comet_number - 1];
@@ -46,7 +46,7 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 	/////////////////////////////////
 
 	//inputs intensity spectra/////////////////////////////////////////////////////
-	fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in); 
+	fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in);
     	double intensity_input[1000][2] = {0};
     	for( int i=0; i<1000; i++ ){
        		for( int j=0; j<2; j++ ){
@@ -71,7 +71,7 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
         //input parameters for elements from comet_input.h
         string element = input_dust_element[x];
-        
+
         //determines optimal delegation of jobs to number of cores
 		int i_hi = 0;
  		int i_lo = 0;
@@ -80,9 +80,9 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
   		int task_proc;
   		int task_remain;
 
-  		int task_number = 91; 
+  		int task_number = 91;
   		MPI_Comm_size( MPI_COMM_WORLD ,&proc_number );
-            
+
   		int task_array[proc_number][3];
 
   		task_remain = task_number;
@@ -96,7 +96,7 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
     			i_lo = i_hi + 1;
     			i_hi = i_hi + task_proc;
-    
+
 			task_array[proc-1][0] = proc-1;
 			task_array[proc-1][1] = i_lo - 1;
 			task_array[proc-1][2] = i_hi - 1;
@@ -104,25 +104,25 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 		//////////////////////////////////
 
     		for (int b=0; b < proc_number; b++){
-			int order = task_array[b][0]; 
-	
+			int order = task_array[b][0];
+
 			if ( rank == order ){
-		 		i_lo = task_array[b][1]; 
+		 		i_lo = task_array[b][1];
 		 		i_hi = task_array[b][2];
 			}
     		}
 
     		while (i_lo <= i_hi ){
-    
-            
-                
+
+
+
             double energy = energy_start;
-    				
+
 			double grain_size;
 			grain_size = ( i_lo )/10.0 + 1.0;
    			string grain_string = static_cast<ostringstream*>( &(ostringstream() << grain_size) )->str();
-			
-                
+
+
             //inputs cross section files
 			string input = "../Inputs/" + element + "_Mie_Data/" + element +
 			"_Mie_" + grain_string + "nm.dat";
@@ -137,19 +137,19 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
     				input_file.close();
 
     			//Calculates the angle between between the Sun and detector from comet center
-    			double theta = acos( (pow(rd,2.0) + pow(rg,2.0) - pow(Ro,2.0) ) / (2*rg*rd) );
+    			double theta = acos( (rd*rd + rg*rg - Ro*Ro ) / (2*rg*rd) );
 
 			//Defines an output file
     			string final_name = "../Results/" + element + "_Results/" + comet_name + "/"
 			+ element + "_output_" + grain_string + "nm_" + comet_name + ".dat";
 
-			int z = 1; 
+			int z = 1;
     			//This loop calculates the intensity emitted for each grain size over the desired energy range
     			while ( energy <= energy_end ){
 
                     double cross_angle[181] = {0};
     				double cross_sec[181] = {0};
-                    
+
     				for ( int k=1; k < 182; k++){
 	    				cross_angle[k-1] = cross_input[0][k];
 
@@ -170,10 +170,10 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
                     double n = abs(alpha - 1) * Np/(a_low) * pow( (a_low/(grain_size*1e-9)), alpha );
 
         			//Calculates intensity ratio
-       				double ratio = n * scat_cross * pow(Ro,2.0)/( pow(rg,2.0)*pow(rd,2.0) ) * delta_a;
+       				double ratio = n * scat_cross * Ro*Ro/( rg*rg * rd*rd ) * delta_a;
 
                     double solar_intensity_temp = gsl_spline_eval (spline_ptr_inten, energy, accel_ptr_inten);
-					
+
                     double Intensity = ratio * solar_intensity_temp;
 
     				//Calculates Brightness of photons scattered per second
@@ -183,13 +183,13 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
     				for( int l = 0; l<=179; l++ ){
 	    				double diff_cross_i = gsl_spline_eval (spline_ptr, l, accel_ptr);
 
-	    				Brightness = Brightness + ( 2*M_PI*pow(rd,2.0)*Intensity )/( diff_cross_Earth ) 
+	    				Brightness = Brightness + ( 2*M_PI*rd*rd*Intensity )/( diff_cross_Earth )
                             * cos((l+0.5)*M_PI/180) * ( sin((l+1)*M_PI/180) - sin(l*M_PI/180) ) * diff_cross_i ;
     				}
-                    
+
                     Brightness = Brightness*(1e4);
                     //Converts Brightness to cm^2 to properly cancel with intensity
-                    
+
     				gsl_spline_free (spline_ptr);
     				gsl_interp_accel_free (accel_ptr);
 
@@ -200,13 +200,13 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
 
     				energy = energy + energy_step;
-				z++; 
+				z++;
     			}
 			i_lo++;
-    		}	
+    		}
 
 		MPI_Barrier(MPI_COMM_WORLD);
-        
+
         //Runs output_compile.h
 		if (rank == 0){
    			output_compile(energy_start, energy_end, energy_step, comet_name, x); }
@@ -214,15 +214,14 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 	}
 
 	MPI_Barrier(MPI_COMM_WORLD);
-    
+
     //Pushes results to dust_mixing_ratio.h
 	if (rank == 0){
 		dust_mixing_ratio(energy_start, energy_end, energy_step, comet_name); }
 
 	gsl_spline_free (spline_ptr_inten);
-   	gsl_interp_accel_free (accel_ptr_inten); 
+   	gsl_interp_accel_free (accel_ptr_inten);
 
 	MPI_Barrier(MPI_COMM_WORLD);
-    return 0;  
+    return 0;
 }
-
