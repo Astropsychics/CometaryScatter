@@ -28,7 +28,7 @@ int gas_core(double energy_start, double energy_end, double energy_step, int com
     double theta = acos( ( rd*rd + rg*rg - Ro*Ro) / (2*rg*rd) );
 
     //Calculates intensity ratio integral
-   	 double ratio = Q * (r/vel) * 1/(6*M_PI) * (1 + cos(M_PI - theta)*cos(M_PI - theta)) * Ro*Ro/( rg*rg * rd*rd );
+   	 double ratio = Q * (r/vel) * 3/(16*M_PI) * (1 + cos(M_PI - theta)*cos(M_PI - theta)) * Ro*Ro/( rg*rg * rd*rd );
 
     //Calculates Brightness of photons scattered per second
     //Note: This ratio needs to be multiplied by the intensity ratio to be complete,
