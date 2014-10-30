@@ -6,7 +6,7 @@ using namespace std;
 // array[0] = 8P
 // array[1] = Encke
 // array[2] = IZ
-// array[3] = LS4 
+// array[3] = LS4
 // array[4] = MH
 // array{5] = ISON
 // array[6] = PanStarrs
@@ -32,9 +32,16 @@ double input_rg[7] = {1.10*1.496e11, 0.89*1.496e11, 0.81*1.496e11, 0.80*1.496e11
    1.176*1.496e11, 1.102*1.496e11};
 
 //solar spectrum scaling factor, based on GOES observations
-double input_scaling_factor[7] = {(0.134 * 6.24e4)/2.36e5, (0.134 * 4.37e5)/2.36e5,
-        (0.134 * 3.00e6)/2.36e5, (0.134 * 3.12e6)/2.36e5, (0.134 * 6.24e5)/2.36e5,
-        (0.134 * 1.20e6)/2.36e5, (0.134 * 3.75e5)/2.36e5};
+//(2.36e5 is the integrated area beneath Si XIII line, which is approximated to be 13.4% the total spectrum)
+//double input_scaling_factor[7] = {(0.134 * 6.24e4)/2.36e5, (0.134 * 4.37e5)/2.36e5,
+//        (0.134 * 3.00e6)/2.36e5, (0.134 * 3.12e6)/2.36e5, (0.134 * 6.24e5)/2.36e5,
+//        (0.134 * 1.20e6)/2.36e5, (0.134 * 3.75e5)/2.36e5};
+
+//solar spectrum scaling factor, based on GOES observations
+//(1.45e18 = integrated area beneath the CHIANTI spectrum, in units of ph/cm^2/sec, over 4-8A)
+double input_scaling_factor[7] = {6.24e4/1.83e16, 4.37e5/1.83e16,
+        3.00e6/1.83e16, 3.12e6/1.83e16, 6.24e5/1.83e16,
+        1.20e6/1.83e16, 3.75e5/1.83e16};
 
 //exposure time, in sec
 double input_t_exp[7] = {47000, 44000, 24000, 9400, 16900, 27000, 30360};

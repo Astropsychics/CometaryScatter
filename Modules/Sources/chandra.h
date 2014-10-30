@@ -71,10 +71,10 @@ int chandra_core(double energy_start, double energy_end, double energy_step, int
     int fluo_row;
     input_fluo >> fluo_row;
 
-    double input_intenfluo[fluo_row][3];
+    double input_intenfluo[fluo_row][2];
     for ( int i=0; i<fluo_row; i++ ){
-        for( int j=0; j<3; j++ ){
-            input_fluo >> input_intenfluo[i][j]; } }
+        for( int j=0; j<2; j++ ){
+            input_fluo >> input_intenfluo[i][j];} }
     input_fluo.close();
 
     //creates fluorescence spectrum by generating and summing gaussians curves for all peaks
@@ -82,8 +82,8 @@ int chandra_core(double energy_start, double energy_end, double energy_step, int
 	for (int p=0; p<fluo_row; p++){
         for (int q=0; q<row; q++){
 
-            double peak = input_intenfluo[p][1];
-            double area = input_intenfluo[p][2];
+            double peak = input_intenfluo[p][0];
+            double area = input_intenfluo[p][1];
             double amplitude = area / ( width * sqrt(2*M_PI) );
 
             //define a Gaussian function for the fluorescence peaks
