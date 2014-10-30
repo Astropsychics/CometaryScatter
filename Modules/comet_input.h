@@ -38,7 +38,7 @@ double input_rg[7] = {1.10*1.496e11, 0.89*1.496e11, 0.81*1.496e11, 0.80*1.496e11
 //        (0.134 * 1.20e6)/2.36e5, (0.134 * 3.75e5)/2.36e5};
 
 //solar spectrum scaling factor, based on GOES observations
-//(1.45e18 = integrated area beneath the CHIANTI spectrum, in units of ph/cm^2/sec, over 4-8A)
+//(1.83e16 = integrated area beneath the CHIANTI spectrum, in units of ph/cm^2/sec, over 4-8A)
 double input_scaling_factor[7] = {6.24e4/1.83e16, 4.37e5/1.83e16,
         3.00e6/1.83e16, 3.12e6/1.83e16, 6.24e5/1.83e16,
         1.20e6/1.83e16, 3.75e5/1.83e16};
