@@ -20,7 +20,7 @@ int atomic_cross(double energy_start, double energy_end, double energy_step, str
 	double u = input_u;
 
 	//inputs intensity spectra and generates interpolation function
-	fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in); 
+	fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in);
     double intensity_input[1000][2];
     for( int i=0; i<1000; i++ ){
         for( int j=0; j<2; j++ ){
@@ -43,16 +43,16 @@ int atomic_cross(double energy_start, double energy_end, double energy_step, str
 
 	//input parameters for elements
 	string element[4] = {"H","C","N","O"};
-	double mass[4] = {1.00794, 12.0107, 14.0071, 15.9994}; 
-	
+	double mass[4] = {1.00794, 12.0107, 14.0071, 15.9994};
+
     //inputs cross sections
 	for (int x = 0; x < 4; x++){
-		string input_name = "../Inputs/" + element[x] + "_sigma.txt";
+		string input_name = "../Inputs/Atomic_Cross_Sections/" + element[x] + "_sigma.txt";
 		ifstream input_file(input_name.c_str());
-    	
-  		int row; 
+
+  		int row;
         input_file >> row;
-	
+
 		double input[row][2];
   			for( int i=0; i<row; i++){
         		for( int j=0; j<2; j++){
@@ -63,12 +63,12 @@ int atomic_cross(double energy_start, double energy_end, double energy_step, str
 		double sigma[row];
  		for (int l=0; l<row; l++){
 
-			energy[l] = (input[l][0]);  // in keV  
- 
-  			sigma[l] = input[l][1]/(1e4) * mass[x] * u; }  	
-			//converts total cross-section from cm^2/g to m^2/g and multiplies by atomic mass 
+			energy[l] = (input[l][0]);  // in keV
+
+  			sigma[l] = input[l][1]/(1e4) * mass[x] * u; }
+			//converts total cross-section from cm^2/g to m^2/g and multiplies by atomic mass
 			//to convert it to a differential cross section in units of m^2
-    
+
    		gsl_interp_accel *accel_ptr;
    		gsl_spline *spline_ptr;
   		accel_ptr = gsl_interp_accel_alloc ();
@@ -80,28 +80,28 @@ int atomic_cross(double energy_start, double energy_end, double energy_step, str
 		//multiplies ratio with cross section and outputs to file
 		string final_name = "../Results/" + comet_name + "/" + element[x] + "_output_" + comet_name + ".dat";
 		ofstream output(final_name.c_str());
-		
- 		double energy_temp = energy_start;		
+
+ 		double energy_temp = energy_start;
 		while (energy_temp <= energy_end){
 
 			double solar_intensity_temp = gsl_spline_eval (spline_ptr_inten, energy_temp, accel_ptr_inten);
 			double cross_temp = gsl_spline_eval (spline_ptr, energy_temp, accel_ptr);
-			double Intensity = ratio * cross_temp * solar_intensity_temp; 
+			double Intensity = ratio * cross_temp * solar_intensity_temp;
 
 			output << scientific << energy_temp << " " << cross_temp
 			<< " " << Intensity << " " << Brightness*Intensity << endl;
 			energy_temp = energy_temp + energy_step;
         }
-   
+
 		output.close();
 		gsl_spline_free (spline_ptr);
 	   	gsl_interp_accel_free (accel_ptr);
-	
+
 	}
-	
+
 	gsl_spline_free (spline_ptr_inten);
-   	gsl_interp_accel_free (accel_ptr_inten);    
-	
+   	gsl_interp_accel_free (accel_ptr_inten);
+
 	return 0;
 }
 

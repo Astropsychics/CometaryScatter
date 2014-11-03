@@ -8,6 +8,8 @@
 #include "chandra.h"
 #include "dust_scatter.h"
 #include "fluo.h"
+#include "cx_calculations.h"
+#include "cx_compare.h"
 
 using namespace std;
 
@@ -15,6 +17,9 @@ using namespace std;
 double energy_start = 0.300;
 double energy_end = 3.000;
 double energy_step = 0.010;
+
+//energy peak width (in keV)
+double width = 0.050;
 
 int main(int argc, char *argv[]){
 
@@ -37,6 +42,9 @@ int main(int argc, char *argv[]){
 		if ( 1 > comet_number || comet_number > 8 ){
 			cout << "I'm sorry, Dave. I can't do that. \n";
 			return 0; }
+
+        //performs cx calculations that will be scaled to each comet later
+        cx_calculations(energy_start, energy_end, energy_step, width);
 	}
 
 	MPI_Bcast(&comet_number, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -51,11 +59,12 @@ int main(int argc, char *argv[]){
 
         MPI_Barrier(MPI_COMM_WORLD);
 
-        //Pushes data to atomic.h and fluo.h
+        //Pushes data to atomic.h, fluo.h, cx_calculations.h 
         //This is performed by one core as calculations are trivial
         if (rank == 0){
         		gas_core(energy_start, energy_end, energy_step, comet_number);
-        		fluo_core(energy_start, energy_step, comet_number); }
+        		fluo_core(energy_start, energy_step, comet_number);
+                cx_compare(energy_start, energy_end, energy_step, comet_number); }
 
         //Pushes data to dust_scatter.h
 		dust_core(energy_start, energy_end, energy_step, comet_number);
@@ -64,7 +73,7 @@ int main(int argc, char *argv[]){
         //Calculations performed by one core, again, due to triviality
         MPI_Barrier(MPI_COMM_WORLD);
         if (rank == 0){
-            chandra_core(energy_start, energy_end, energy_step, comet_number); }
+            chandra_core(energy_start, energy_end, energy_step, width, comet_number); }
 
         //Add +1 to counter to begin next comet, else ends program
         if (comet_all == true){

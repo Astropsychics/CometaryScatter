@@ -9,10 +9,7 @@
 
 using namespace std;
 
-//Energy width (in keV)
-double width = 0.050;
-
-int chandra_core(double energy_start, double energy_end, double energy_step, int comet_number){
+int chandra_core(double energy_start, double energy_end, double energy_step, double width, int comet_number){
 
     //inputs effective area
     fstream input_area_file("../Inputs/Effective_Area/effective_area_Chandra.dat", fstream::in);
@@ -92,11 +89,25 @@ int chandra_core(double energy_start, double energy_end, double energy_step, int
         }
     }
 
+    //inputs cx spectrum
+    string Inten_CX = "../Results/" + comet_name + "/CX_spectrum_" + comet_name + ".dat";
+    fstream input_cx(Inten_CX.c_str(), fstream::in);
+    double input_cx_spectrum[row][2];
+    double cx_energy[row];
+    double cx_intensity[row];
+    for( int i=0; i<row; i++ ){
+        for( int j=0; j<2; j++ ){
+            input_cx >> input_cx_spectrum[i][j]; }
+        cx_energy[i] = input_cx_spectrum[i][0];
+        cx_intensity[i] = input_cx_spectrum[i][1];
+    }
+    input_cx.close();
+
     //Creates output files
-    string spectra_name = "../Results/" + comet_name + "/spectra_total_" + comet_name + ".dat";
+    string spectra_name = "../Results/" + comet_name + "/spectrum_total_" + comet_name + ".dat";
     ofstream spectra(spectra_name.c_str());
 
-    string Chandra_name = "../Results/" + comet_name + "/Chandra_spectra_total_" + comet_name + ".dat";
+    string Chandra_name = "../Results/" + comet_name + "/Chandra_spectrum_total_" + comet_name + ".dat";
     ofstream Chandra(Chandra_name.c_str());
 
     for (int l=0; l<row; l++){
@@ -104,7 +115,7 @@ int chandra_core(double energy_start, double energy_end, double energy_step, int
         while ( input_area[z][1] <= input_energy[l] ){
             z++; }
 
-        total_inten[l] = total_inten[l] + fluo_spectrum[l];
+        total_inten[l] += fluo_spectrum[l] + cx_intensity[l];
 
         //outputs total intensity spectrum to a file
         spectra << scientific << input_energy[l] << " " << total_inten[l] << endl;
@@ -117,10 +128,10 @@ int chandra_core(double energy_start, double energy_end, double energy_step, int
     //Outputs gas and dust spectra separately, if required
     int ADDITIONAL_DATA = 1;
     if ( ADDITIONAL_DATA == 1 ){
-        string dust_out_name = "../Results/" + comet_name + "/Chandra_dust_spectra_" + comet_name + ".dat";
+        string dust_out_name = "../Results/" + comet_name + "/Chandra_dust_spectrum_" + comet_name + ".dat";
         ofstream dust_out(dust_out_name.c_str());
 
-        string gas_out_name = "../Results/" + comet_name + "/Chandra_gas_spectra_" + comet_name + ".dat";
+        string gas_out_name = "../Results/" + comet_name + "/Chandra_gas_spectrum_" + comet_name + ".dat";
         ofstream gas_out(gas_out_name.c_str());
 
         for (int l=0; l<row; l++){

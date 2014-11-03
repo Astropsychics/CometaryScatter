@@ -68,7 +68,7 @@ int fluorescence_calc(double energy_start, double energy_step, string comet_name
             double peak_ratio = fluo_ratio * peak_efficiency;
 
             //inputs the cross-sections from a .dat file
-            string input_name = "../Inputs/" + peak_name + "_cross.dat";
+            string input_name = "../Inputs/Fluo_Cross_Sections/" + peak_name + "_cross.dat";
             fstream input_file(input_name.c_str(), fstream::in);
 
             int row;
