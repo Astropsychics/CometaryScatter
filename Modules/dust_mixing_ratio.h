@@ -47,7 +47,7 @@ int dust_mixing_ratio(double energy_start, double energy_end, double energy_step
 	}
 
     //Write output to file
-	string final_name = "../Results/" + comet_name + "/dust_total_output_" + comet_name + ".dat";
+	string final_name = "../Results/" + comet_name + "/dust_spectrum_" + comet_name + ".dat";
 	ofstream output(final_name.c_str());
  	
 	for ( int l=0; l<row; l++ ){

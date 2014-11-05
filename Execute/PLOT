@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm ../Plots/*.eps
+cd ../Plots/Plotters/
+
+octave Chandra_Comparison.m
+
+octave Chandra_GasDust_Comparison.m
+
+cd ../../Execute

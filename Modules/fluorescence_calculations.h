@@ -44,7 +44,7 @@ int fluorescence_calc(double energy_start, double energy_step, string comet_name
 
 
  	//Creates output file and defines number of row in output data based on number of peaks analyzed
-	string Inten_name = "../Results/" + comet_name + "/fluorescence_total_output_" + comet_name + ".dat";
+	string Inten_name = "../Results/" + comet_name + "/fluorescence_spectrum_" + comet_name + ".dat";
 	fstream Inten(Inten_name.c_str(), fstream::out | fstream::app);
 	Inten << number_of_peaks << endl;
 	Inten.close();

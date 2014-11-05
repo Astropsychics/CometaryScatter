@@ -44,7 +44,7 @@ int gas_mixing_ratio(double energy_start, double energy_end, double energy_step,
 	}
     
     //writes to output file
-	string final_name = "../Results/" + comet_name + "/gas_total_output_" + comet_name + ".dat";
+	string final_name = "../Results/" + comet_name + "/gas_spectrum_" + comet_name + ".dat";
 	ofstream output(final_name.c_str());
 		
  	for ( int l=0; l<row; l++ ){

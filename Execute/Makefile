@@ -15,4 +15,4 @@ clean:
 	$(RM) $(OBJS)
 
 clobber:
-	$(RM) MAIN ../Results/*/*.dat ../Results/*.dat
+	$(RM) MAIN ../Results/*/*.dat ../Results/*.dat ../Plots/*.eps

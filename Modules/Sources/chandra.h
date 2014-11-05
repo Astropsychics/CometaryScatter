@@ -42,7 +42,7 @@ int chandra_core(double energy_start, double energy_end, double energy_step, dou
     for( int x = 0; x < 2; x++ ){
 
 		string Inten = "../Results/" + comet_name + "/" + element_type[x] +
-                "_total_output_" + comet_name + ".dat";
+                "_spectrum_" + comet_name + ".dat";
 		fstream input(Inten.c_str(), fstream::in);
 
         for( int i=0; i<row; i++ ){
@@ -62,7 +62,7 @@ int chandra_core(double energy_start, double energy_end, double energy_step, dou
     }
 
     //inputs fluoresence data
-    string Inten_fluo = "../Results/" + comet_name + "/fluorescence_total_output_" + comet_name + ".dat";
+    string Inten_fluo = "../Results/" + comet_name + "/fluorescence_spectrum_" + comet_name + ".dat";
     fstream input_fluo(Inten_fluo.c_str(), fstream::in);
 
     int fluo_row;
@@ -104,10 +104,10 @@ int chandra_core(double energy_start, double energy_end, double energy_step, dou
     input_cx.close();
 
     //Creates output files
-    string spectra_name = "../Results/" + comet_name + "/spectrum_total_" + comet_name + ".dat";
+    string spectra_name = "../Results/" + comet_name + "/total_spectrum_" + comet_name + ".dat";
     ofstream spectra(spectra_name.c_str());
 
-    string Chandra_name = "../Results/" + comet_name + "/Chandra_spectrum_total_" + comet_name + ".dat";
+    string Chandra_name = "../Results/" + comet_name + "/Chandra_total_spectrum_" + comet_name + ".dat";
     ofstream Chandra(Chandra_name.c_str());
 
     for (int l=0; l<row; l++){
