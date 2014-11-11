@@ -6,9 +6,9 @@ for i={'8P','Encke','ISON','IZ','LS4','MH','PanSTARRS'}
 
 comet_name = i{1};
 
-f = fopen(strcat('../../Results/',comet_name,'/Chandra_total_spectrum_',comet_name,'.dat')); 
-d = fscanf(f,'%f %f',[2,inf]); 
-d = d'; 
+f  = fopen(strcat('../../Results/',comet_name,'/Chandra_total_spectrum_',comet_name,'.dat')); 
+d  = fscanf(f,'%f %f',[2,inf]); 
+d  = d'; 
 fO = fopen(strcat('../Observations/',comet_name,'_intensity_Chandra.dat'));
 dO = fscanf(fO,'%f %f',[2,inf]);
 dO = dO';
@@ -20,8 +20,9 @@ EO = dO(:,1);
 IO = dO(:,2); 
 
 figure
-semilogy(E,I,'g', EO,IO,'k', 'LineWidth',2.5)
+semilogy(E,I,'g', EO,IO,'ko', 'LineWidth',2.5)
 set(gca,'FontSize',16)
+title(strcat(comet_name,' Total Spectrum Comparison'))
 xlabel('Energy [keV]')
 ylabel('Counts sec^{-1} keV^{-1}');
 legend('Model','Obs','Location','NorthEast');

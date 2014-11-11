@@ -3,8 +3,6 @@
 rm ../Plots/*.eps
 cd ../Plots/Plotters/
 
-octave Chandra_Comparison.m
-
-octave Chandra_GasDust_Comparison.m
+matlab -r "Chandra_Comparison,Chandra_GasDust_Comparison,quit()"
 
 cd ../../Execute
