@@ -22,7 +22,9 @@ IO = dO(:,2);
 figure
 semilogy(E,I,'g', EO,IO,'ko', 'LineWidth',2.5)
 set(gca,'FontSize',16)
+%xlim([0 1])
 title(strcat(comet_name,' Total Spectrum Comparison'))
+%title(strcat(comet_name,' CX Comparison'))
 xlabel('Energy [keV]')
 ylabel('Counts sec^{-1} keV^{-1}');
 legend('Model','Obs','Location','NorthEast');

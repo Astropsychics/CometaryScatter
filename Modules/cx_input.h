@@ -10,7 +10,11 @@ int input_cx_elements = 11;
 double input_cx_sigma[11] = {4.16, 0.722, 9.5, 3.71, 2.27, 6.3, 5.3, 3.67, 7.2, 3.7};
 
 //particle density, relative to O
-double input_cx_n[11] = {.08, .20, .017, .035, .065, .014, .08, .73, .002, .094, .098};
+//double input_cx_n[11] = {.08, .20, .017, .035, .065, .014, .08, .73, .002, .094, .098};
+
+//Increased O8+ and Ne9+ production
+double input_cx_n[11] = {0.318, 0.210, 0.006, 0.058, 0.065, 0.130, 0.200, 0.670, 0.020,
+			 0.084, 0.098};
 
 //cx low sw speed table filename
 string input_cx_line_name_low[11] = {"C6collisionwithH2V0.19","C5collisionwithH2V0.18",
