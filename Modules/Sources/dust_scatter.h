@@ -13,15 +13,10 @@
 #include "../task_division.h"
 #include "../output_compile.h"
 #include "../dust_mixing_ratio.h"
+#include "../dust_large_grain.h"
+#include "../dust_input.h"
 
 using namespace std;
-
-//Dust model variables
-double alpha = 2.5; 		       //Dust density dependence on grain radius
-double beta = 2.0; 		       //Dust density dependence on radius from cometary center
-double a_low = 1e-9;		       //Lower bound of grain size integration
-double delta_a = 0.1e-9;	       //Grain radius step size
-
 
 int dust_core(double energy_start, double energy_end, double energy_step, int comet_number){
 
@@ -40,6 +35,12 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 	double rg = input_rg[comet_number - 1];
 	double scaling_factor = input_scaling_factor[comet_number - 1];
 	string comet_name = input_comet_name[comet_number - 1];
+
+    //inputs dust model variables from dust_input.h
+    double alpha = input_alpha;
+    double beta = input_beta;
+    double a_low = input_a_low;
+    double delta_a = input_delta_a;
 
 	/////////////////////////////////
     double Np = (Q/4.76e27)*1e27;      //Number of particles, as determined from Fink & Rubin 2012,
@@ -215,9 +216,11 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
 
 	MPI_Barrier(MPI_COMM_WORLD);
 
-    //Pushes results to dust_mixing_ratio.h
+    //Pushes results to dust_mixing_ratio.h and dust_large_grain.h
 	if (rank == 0){
-		dust_mixing_ratio(energy_start, energy_end, energy_step, comet_name); }
+		dust_mixing_ratio(energy_start, energy_end, energy_step, comet_name);
+        dust_large_grain(energy_start, energy_end, energy_step, comet_name);
+    }
 
 	gsl_spline_free (spline_ptr_inten);
    	gsl_interp_accel_free (accel_ptr_inten);

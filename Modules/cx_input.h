@@ -6,10 +6,10 @@ using namespace std;
 //number of elements
 int input_cx_elements = 20;
 
-//element order: C6+, C5+, N7+, N6+, N5+, O8+, O7+, O6+, Ne9+, Ne8+, Mg10+, Mg9+, 
+//element order: C6+, C5+, N7+, N6+, N5+, O8+, O7+, O6+, Ne9+, Ne8+, Mg10+, Mg9+,
 //               Fe13+, Fe12+, Fe11+, Fe10+, Si9+, S10+, S9+, S8+
 
-//cross section, in units of 10-17 cm^2
+//cross section, in units of 10-15 cm^2
 double input_cx_sigma[20] = {4.16, 0.722, 9.5, 3.71, 2.27, 6.3, 5.3, 3.67, 7.2, 3.7, 3.7,
                             4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0};
 
