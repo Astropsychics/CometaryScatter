@@ -40,11 +40,28 @@ int dust_core(double energy_start, double energy_end, double energy_step, int co
     double alpha = input_alpha;
     double beta = input_beta;
     double a_low = input_a_low;
+    double a_max = input_a_max;
     double delta_a = input_delta_a;
+    double gas_mass = input_gas_mass;
+    double dust_density = input_dust_density;
 
 	/////////////////////////////////
-    double Np = (Q/4.76e27)*1e27;      //Number of particles, as determined from Fink & Rubin 2012,
+    //double Np = (Q/4.76e27)*1e27;      //Number of particles, as determined from Fink & Rubin 2012,
 	/////////////////////////////////
+
+    //Integrates to find the average particle radius given the selected distribution
+    //Note: the equation is a simplified notation of int[a*n(r,a)] / int[n(r,a)]
+    double a_avg = 0;
+    for( double ap = a_low; ap <= a_max; ap+=a_low ){
+        a_avg += (alpha - 1) * pow(a_low/ap, alpha - 1) * a_low; }
+
+    //Calculates dust particle loss rate assuming mass loss rate is equal to
+    //the gas mass loss rate
+    double Qd = (Q * gas_mass) / ( (4/3) * M_PI * a_avg*a_avg*a_avg * dust_density);
+
+    //Calculates total number of dust particles
+    double Np = Qd * r/vel;
+
 
 	//inputs intensity spectra/////////////////////////////////////////////////////
 	fstream intensity_file("../Inputs/Spectra/Total_Intensity_CHIANTI.dat", fstream::in);

@@ -10,7 +10,6 @@
 
 #include "./dust_input.h"
 
-
 using namespace std;
 
 int dust_large_grain(double energy_start, double energy_end, double energy_step, string comet_name){
@@ -26,7 +25,7 @@ int dust_large_grain(double energy_start, double energy_end, double energy_step,
 
     //Calculates normalization constant
     double norm_const = 0;
-    for ( double a = 1e-9; a <= 1e-8; a+=1e-10){
+    for ( double a = 1e-9; a <= 1e-8; a += 1e-10){
         norm_const += pow(a, gamma - alpha) * 1e-10;
     }
 
