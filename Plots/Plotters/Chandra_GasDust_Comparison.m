@@ -25,12 +25,12 @@ EO = dO(:,1);
 IO = dO(:,2); 
 
 figure
-semilogy(Eg,Ig,'g', Ed,Id,'r', EO,IO,'ko', 'LineWidth',2.5)
+semilogy(Ed,Id,'r',Eg,Ig,'g', EO,IO,'ko', 'LineWidth',2.5)
 set(gca,'FontSize',16)
 title(strcat(comet_name,' Scattering Comparison'))
 xlabel('Energy [keV]')
 ylabel('Counts sec^{-1} keV^{-1}');
-legend('Model','Obs','Location','NorthEast');
+legend('Dust','Gas','Observation','Location','NorthEast');
 print('-depsc2',strcat('../Chandra_gasdust_comparison_',comet_name,'.eps'));
 
 clear all

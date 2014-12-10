@@ -3,6 +3,6 @@
 rm ../Plots/*.eps
 cd ../Plots/Plotters/
 
-matlab -r "Chandra_Comparison,Chandra_GasDust_Comparison,quit()"
+matlab -nodisplay -r "Chandra_Comparison,Chandra_CX_Comparison,Chandra_GasDust_Comparison,quit()"
 
 cd ../../Execute
