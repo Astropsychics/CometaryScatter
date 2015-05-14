@@ -89,17 +89,14 @@ int cx_calculations(double energy_start, double energy_end, double energy_step, 
                 double amplitude = area / ( width * sqrt(2*M_PI) );
 
                 //define a Gaussian function for the cx peaks
-                cx_spectrum[q] += amplitude * exp( -pow(input_energy[q] - peak,2.0) / (2 * pow(width,2.0)) );
+                cx_spectrum[q] += amplitude * exp( -pow(input_energy[q] - peak,2.0) / (2 * width*width) );
             }
         }
     }
 
     //declares output file names
-    string spectra_name = "../Results/CX_spectrum.dat";
-    ofstream spectra(spectra_name.c_str());
-
-    string Chandra_name = "../Results/CX_Chandra_spectrum.dat";
-    ofstream Chandra(Chandra_name.c_str());
+    ofstream spectra("../Results/CX_spectrum.dat");
+    ofstream Chandra("../Results/CX_Chandra_spectrum.dat");
 
     for (int l=0; l<energy_row; l++){
         int z = 0;

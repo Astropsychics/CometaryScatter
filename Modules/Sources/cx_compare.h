@@ -79,7 +79,7 @@ int cx_compare(double energy_start, double energy_end, double energy_step, int c
     }
 
     double average_scaling_factor = scaling_factor/counter;
-
+    
     //outputs re-scaled Chandra spectrum
     string output_name_Chandra = "../Results/" + comet_name + "/Chandra_CX_spectrum_"+ comet_name + ".dat";
     ofstream output_file_Chandra(output_name_Chandra.c_str());
