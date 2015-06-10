@@ -15,21 +15,23 @@ using namespace std;
 int dust_large_grain(double energy_start, double energy_end, double energy_step, string comet_name){
 
     //inputs dust model variables from dust_input.h
-    double alpha = input_alpha;
-    double gamma = input_gamma;
-    double a_max = input_a_max;
+    double alpha = input_alpha; //Dust density dependence on grain radius
+    double gamma = input_gamma; //Dust density dependence on cross section
+    double a_max = input_a_max; //Maximum dust radius
 
     //determines numbers of energy steps to perform and generates intensity array
     int row = (energy_end - energy_start)/energy_step + 1;
     vector< vector<double> > total_intensity(row, std::vector<double>(3, 0));
 
-    //Calculates normalization constant
+    //Calculates normalization constant.
+    //Step size of integration is 1e-10
     double norm_const = 0;
     for ( double a = 1e-9; a <= 1e-8; a += 1e-10){
         norm_const += pow(a, gamma - alpha) * 1e-10;
     }
 
-    //Calculates additional contribution from larger grains
+    //Calculates additional contribution from larger grains.
+    //Step size of integration is 1e-8
     double large_grain_int = 0;
     for ( double a = 1e-8; a <= a_max; a += 1e-8){
         large_grain_int += pow(a, gamma - alpha) * 1e-8;

@@ -12,7 +12,7 @@ using namespace std;
 int chandra_core(double energy_start, double energy_end, double energy_step, double width, int comet_number){
 
     //inputs effective area
-    fstream input_area_file("../Inputs/Effective_Area/effective_area_Chandra.dat", fstream::in);
+    fstream input_area_file("../Inputs/Effective_Area/acis_effective_area.dat", fstream::in);
 
     int area_row;
     input_area_file >> area_row;

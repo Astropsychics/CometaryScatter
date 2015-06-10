@@ -23,7 +23,7 @@ int cx_calculations(double energy_start, double energy_end, double energy_step, 
         energy += energy_step; }
 
     //input effective area
-    fstream input_area_file("../Inputs/Effective_Area/effective_area_Chandra.dat", fstream::in);
+    fstream input_area_file("../Inputs/Effective_Area/acis_effective_area.dat", fstream::in);
 
     int area_row;
     input_area_file >> area_row;
